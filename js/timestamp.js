@@ -1,7 +1,3 @@
-/**
- * @global jQuery
- */
-
 var Kouinkouin = Kouinkouin || {};
 
 Kouinkouin.Counter = (function($) {

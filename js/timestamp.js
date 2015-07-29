@@ -1,10 +1,14 @@
 var Kouinkouin = Kouinkouin || {};
 
-Kouinkouin.Counter = (function($) {
-	var exports = {};
-	var diffTimestamp;
+Kouinkouin.Counter = (function() {
+	var exports = {},
+		diffTimestamp,
+		domNode,
+        urlService;
 
-	exports.init = function(){
+	exports.init = function(params){
+		domNode = params.domNode;
+        urlService = params.url;
 		getJson();
 		setInterval(getJson, 60 * 1000);
 		setInterval(renewTimestamp, 1000);
@@ -33,11 +37,19 @@ Kouinkouin.Counter = (function($) {
 	};
 
 	var fillIn = function(data){
-		$('#fillme').text(data);
+		domNode.innerHTML = data;
 	};
 
 	var getJson = function() {
-		$.getJSON('timestamp.php', {}, resultJson);
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var data = JSON.parse(xmlhttp.responseText);
+                resultJson(data);
+            }
+        };
+        xmlhttp.open("GET", urlService, true);
+        xmlhttp.send();
 	};
 
 	var renewTimestamp = function(){
@@ -46,8 +58,4 @@ Kouinkouin.Counter = (function($) {
 	};
 
 	return exports;
-})(jQuery);
-
-$(document).ready(function(){
-	Kouinkouin.Counter.init();
-});
+})();

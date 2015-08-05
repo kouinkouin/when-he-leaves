@@ -4,7 +4,8 @@ Kouinkouin.Counter = (function() {
 	var exports = {},
 		diffTimestamp,
 		domNode,
-        urlService;
+        urlService,
+        display;
 
 	exports.init = function(params){
 		domNode = params.domNode;
@@ -12,6 +13,7 @@ Kouinkouin.Counter = (function() {
 		getJson();
 		setInterval(getJson, 60 * 1000);
 		setInterval(renewTimestamp, 1000);
+        display = displays[Math.floor(Math.random() * displays.length)];
 	};
 
 	function formatDate(days, hours, minutes, seconds) {
@@ -64,7 +66,7 @@ Kouinkouin.Counter = (function() {
 
 	var resultJson = function(data){
 		diffTimestamp = data.endOfSuffering - data.timestamp;
-		fillIn(daysBetween(diffTimestamp));
+		fillIn(display(diffTimestamp));
 	};
 
 	var fillIn = function(data){
@@ -85,7 +87,7 @@ Kouinkouin.Counter = (function() {
 
 	var renewTimestamp = function(){
 		diffTimestamp--;
-		fillIn(daysBetween(diffTimestamp))
+		fillIn(display(diffTimestamp))
 	};
 
 	return exports;

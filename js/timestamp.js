@@ -15,7 +15,20 @@ Kouinkouin.Counter = (function() {
 	};
 
 	function formatDate(days, hours, minutes, seconds) {
-		return days + ' days, ' + hours + ' hours, ' + minutes + ' minutes, and ' + seconds + ' seconds';
+        var formattedDate = '';
+        if (formattedDate != '' || days > 0) {
+            formattedDate += days + ' ' + (days > 1 ? 'days' : 'day') + ', ';
+        }
+        if (formattedDate != '' || hours > 0) {
+            formattedDate += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ', ';
+        }
+        if (formattedDate != '' || minutes > 0) {
+            formattedDate += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute') + ', ';
+        }
+        if (formattedDate != '' || seconds > 0) {
+            formattedDate += seconds + ' ' + (seconds > 1 ? 'seconds' : 'second');
+        }
+        return formattedDate;
 	}
 
 	var daysBetween = function( timestamp ) {

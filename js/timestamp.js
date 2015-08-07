@@ -18,20 +18,25 @@ Kouinkouin.Counter = (function() {
 
     function formatDate(days, hours, minutes, seconds) {
         var formattedDate = '';
-        if (formattedDate != '' || days > 0) {
-            formattedDate += days + ' ' + 'day' + addPluralForm(days) + ', ';
-        }
-        if (formattedDate != '' || hours > 0) {
-            formattedDate += hours + ' ' + 'hour' + addPluralForm(hours) + ', ';
-        }
-        if (formattedDate != '' || minutes > 0) {
-            formattedDate += minutes + ' ' + 'minute' + addPluralForm(minutes) + ', ';
-        }
-        if (formattedDate != '' || seconds > 0) {
-            formattedDate += seconds + ' ' + 'second' + addPluralForm(seconds);
-        }
+        formattedDate += displayItem('day', days, true);
+        formattedDate += displayItem('hour', hours, true);
+        formattedDate += displayItem('minute', minutes, true);
+        formattedDate += displayItem('second', seconds, false);
         return formattedDate;
     }
+
+    var displayItem = function(itemToDisplay, value, separatorAvailable){
+        if (! value) {
+            return '';
+        }
+        var toDisplay = value + ' ' + itemToDisplay + addPluralForm(value);
+
+        if (separatorAvailable){
+            toDisplay += ', ';
+        }
+
+        return toDisplay;
+    };
 
     var addPluralForm = function(value){
         return (value > 1) ? 's': '';

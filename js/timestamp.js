@@ -80,7 +80,7 @@ Kouinkouin.Counter = (function() {
 
     var display = function(){
         if (diffTimestamp <= 0){
-            fillIn('It is left');
+            fillIn('He is left');
             return;
         }
         fillIn(formatFunction(diffTimestamp));

@@ -19,19 +19,23 @@ Kouinkouin.Counter = (function() {
     function formatDate(days, hours, minutes, seconds) {
         var formattedDate = '';
         if (formattedDate != '' || days > 0) {
-            formattedDate += days + ' ' + (days > 1 ? 'days' : 'day') + ', ';
+            formattedDate += days + ' ' + 'day' + addPluralForm(days) + ', ';
         }
         if (formattedDate != '' || hours > 0) {
-            formattedDate += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ', ';
+            formattedDate += hours + ' ' + 'hour' + addPluralForm(hours) + ', ';
         }
         if (formattedDate != '' || minutes > 0) {
-            formattedDate += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute') + ', ';
+            formattedDate += minutes + ' ' + 'minute' + addPluralForm(minutes) + ', ';
         }
         if (formattedDate != '' || seconds > 0) {
-            formattedDate += seconds + ' ' + (seconds > 1 ? 'seconds' : 'second');
+            formattedDate += seconds + ' ' + 'second' + addPluralForm(seconds);
         }
         return formattedDate;
     }
+
+    var addPluralForm = function(value){
+        return (value > 1) ? 's': '';
+    };
 
     var daysBetween = function( timestamp ) {
 

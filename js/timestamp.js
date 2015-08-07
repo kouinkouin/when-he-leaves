@@ -5,7 +5,7 @@ Kouinkouin.Counter = (function() {
         diffTimestamp,
         domNode,
         urlService,
-        display;
+        formatFunction;
 
     exports.init = function(params){
         domNode = params.domNode;
@@ -13,7 +13,7 @@ Kouinkouin.Counter = (function() {
         getJson();
         setInterval(getJson, 60 * 1000);
         setInterval(renewTimestamp, 1000);
-        display = displays[Math.floor(Math.random() * displays.length)];
+        formatFunction = formatFunctions[Math.floor(Math.random() * formatFunctions.length)];
     };
 
     function formatDate(days, hours, minutes, seconds) {
@@ -50,7 +50,7 @@ Kouinkouin.Counter = (function() {
         return formatDate(days, hours, minutes, seconds);
     };
 
-    var displays = [
+    var formatFunctions = [
         function (timestamp) {
             return countEpisodes(timestamp, 55 * 60, 'Inspector Derrick');
         },
@@ -70,7 +70,7 @@ Kouinkouin.Counter = (function() {
 
     var resultJson = function(data){
         diffTimestamp = data.endOfSuffering - data.timestamp;
-        fillIn(display(diffTimestamp));
+        fillIn(formatFunction(diffTimestamp));
     };
 
     var fillIn = function(data){
@@ -91,7 +91,7 @@ Kouinkouin.Counter = (function() {
 
     var renewTimestamp = function(){
         diffTimestamp--;
-        fillIn(display(diffTimestamp))
+        fillIn(formatFunction(diffTimestamp))
     };
 
     return exports;

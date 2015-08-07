@@ -70,6 +70,14 @@ Kouinkouin.Counter = (function() {
 
     var resultJson = function(data){
         diffTimestamp = data.endOfSuffering - data.timestamp;
+        display();
+    };
+
+    var display = function(){
+        if (diffTimestamp <= 0){
+            fillIn('It is left');
+            return;
+        }
         fillIn(formatFunction(diffTimestamp));
     };
 
@@ -91,7 +99,7 @@ Kouinkouin.Counter = (function() {
 
     var renewTimestamp = function(){
         diffTimestamp--;
-        fillIn(formatFunction(diffTimestamp))
+        display();
     };
 
     return exports;

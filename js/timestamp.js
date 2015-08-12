@@ -1,52 +1,61 @@
 var Kouinkouin = Kouinkouin || {};
 
 Kouinkouin.Counter = (function() {
-	var exports = {},
-		diffTimestamp,
-		domNode,
+    var exports = {},
+        diffTimestamp,
+        domNode,
         urlService,
-        display;
+        formatFunction;
 
-	exports.init = function(params){
-		domNode = params.domNode;
+    exports.init = function(params){
+        domNode = params.domNode;
         urlService = params.url;
-		getJson();
-		setInterval(getJson, 60 * 1000);
-		setInterval(renewTimestamp, 1000);
-        display = displays[Math.floor(Math.random() * displays.length)];
-	};
+        getJson();
+        setInterval(getJson, 60 * 1000);
+        setInterval(renewTimestamp, 1000);
+        formatFunction = formatFunctions[Math.floor(Math.random() * formatFunctions.length)];
+    };
 
-	function formatDate(days, hours, minutes, seconds) {
+    function formatDate(days, hours, minutes, seconds) {
         var formattedDate = '';
-        if (formattedDate != '' || days > 0) {
-            formattedDate += days + ' ' + (days > 1 ? 'days' : 'day') + ', ';
-        }
-        if (formattedDate != '' || hours > 0) {
-            formattedDate += hours + ' ' + (hours > 1 ? 'hours' : 'hour') + ', ';
-        }
-        if (formattedDate != '' || minutes > 0) {
-            formattedDate += minutes + ' ' + (minutes > 1 ? 'minutes' : 'minute') + ', ';
-        }
-        if (formattedDate != '' || seconds > 0) {
-            formattedDate += seconds + ' ' + (seconds > 1 ? 'seconds' : 'second');
-        }
+        formattedDate += displayItem('day', days, true);
+        formattedDate += displayItem('hour', hours, true);
+        formattedDate += displayItem('minute', minutes, true);
+        formattedDate += displayItem('second', seconds, false);
         return formattedDate;
-	}
+    }
 
-	var daysBetween = function( timestamp ) {
+    var displayItem = function(itemToDisplay, value, separatorAvailable){
+        if (! value) {
+            return '';
+        }
+        var toDisplay = value + ' ' + itemToDisplay + addPluralForm(value);
 
-		var seconds = Math.floor(timestamp % 60);
-		timestamp = timestamp/60;
-		var minutes = Math.floor(timestamp % 60);
-		timestamp = timestamp/60;
-		var hours = Math.floor(timestamp % 24);
+        if (separatorAvailable){
+            toDisplay += ', ';
+        }
 
-		var days = Math.floor(timestamp/24);
+        return toDisplay;
+    };
 
-		return formatDate(days, hours, minutes, seconds);
-	};
+    var addPluralForm = function(value){
+        return (value > 1) ? 's': '';
+    };
 
-    var displays = [
+    var daysBetween = function( timestamp ) {
+
+        var seconds = Math.floor(timestamp % 60);
+        timestamp = timestamp/60;
+        var minutes = Math.floor(timestamp % 60);
+        timestamp = timestamp/60;
+        var hours = Math.floor(timestamp % 24);
+
+        var days = Math.floor(timestamp/24);
+
+        return formatDate(days, hours, minutes, seconds);
+    };
+
+    var formatFunctions = [
         function (timestamp) {
             return countEpisodes(timestamp, 55 * 60, 'Inspector Derrick');
         },
@@ -64,16 +73,24 @@ Kouinkouin.Counter = (function() {
             + (formattedDate == '' ? '' : '<br /> and ' + formattedDate);
     };
 
-	var resultJson = function(data){
-		diffTimestamp = data.endOfSuffering - data.timestamp;
-		fillIn(display(diffTimestamp));
-	};
+    var resultJson = function(data){
+        diffTimestamp = data.endOfSuffering - data.timestamp;
+        display();
+    };
 
-	var fillIn = function(data){
-		domNode.innerHTML = data;
-	};
+    var display = function(){
+        if (diffTimestamp <= 0){
+            fillIn('He is left');
+            return;
+        }
+        fillIn(formatFunction(diffTimestamp));
+    };
 
-	var getJson = function() {
+    var fillIn = function(data){
+        domNode.innerHTML = data;
+    };
+
+    var getJson = function() {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -83,12 +100,12 @@ Kouinkouin.Counter = (function() {
         };
         xmlhttp.open("GET", urlService, true);
         xmlhttp.send();
-	};
+    };
 
-	var renewTimestamp = function(){
-		diffTimestamp--;
-		fillIn(display(diffTimestamp))
-	};
+    var renewTimestamp = function(){
+        diffTimestamp--;
+        display();
+    };
 
-	return exports;
+    return exports;
 })();

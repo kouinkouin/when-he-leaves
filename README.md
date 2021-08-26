@@ -1,6 +1,4 @@
 # when-he-leaves
 
-A bad page to tell you when the person will leave us.
-
-Example: http://shyam-leaves-us.kouinkouin.com/ .
-
+## ⚠️ Obsolete.
+A better project to follow (and contribute!) : https://github.com/Cryde/fatidique/ (https://fatidique.com/)
